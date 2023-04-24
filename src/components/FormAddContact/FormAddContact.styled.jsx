@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { Form, Field, ErrorMessage } from 'formik';
 
-export const StyledForm = styled.form`
+export const StyledForm = styled(Form)`
   padding: 1rem;
   width: 30rem;
   border: 1px solid black;
@@ -8,8 +9,8 @@ export const StyledForm = styled.form`
 
 export const FormContainer = styled.div`
   display: flex;
-  flex-direction:column;
-  gap:1rem;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 export const Button = styled.button`
@@ -25,6 +26,11 @@ export const Button = styled.button`
   }
 `;
 
-export const Input = styled.input`
-display: block;
+export const Input = styled(Field)`
+  display: block;
+`;
+
+export const ErrMessage = styled(ErrorMessage)`
+  font-size: 14px;
+  color: red;
 `;

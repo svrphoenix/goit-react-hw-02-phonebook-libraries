@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout/Layout';
 import { FormAddContact } from './FormAddContact/FormAddContact';
@@ -14,14 +16,16 @@ export class App extends Component {
 
   addContact = newContact => {
     const { contacts } = this.state;
-    const isContact = contacts.find(item =>
-      item.name.includes(newContact.name)
+    const isContactName = contacts.find(
+      ({ name }) => name.toLowerCase() === newContact.name.toLowerCase()
     );
-    if (!isContact) {
-      this.setState(prevState => ({
-        contacts: [...prevState.contacts, newContact],
-      }));
-    } else alert(`${newContact.name} is alredy in contacts`);
+    if (isContactName) {
+      toast.error(`${newContact.name} is alredy in contacts`);
+      return;
+    }
+    this.setState(state => ({
+      contacts: [...state.contacts, newContact],
+    }));
   };
 
   findContact = ({ currentTarget: { value } }) => {
@@ -30,14 +34,14 @@ export class App extends Component {
 
   getVisibleContacts = () => {
     const { filter, contacts } = this.state;
-    return contacts.filter(item =>
-      item.name.toLowerCase().includes(filter.toLowerCase())
+    return contacts.filter(({ name }) =>
+      name.toLowerCase().includes(filter.toLowerCase())
     );
   };
 
-  deleteContact = id => {
+  deleteContact = contactId => {
     this.setState(state => ({
-      contacts: state.contacts.filter(item => item.id !== id),
+      contacts: state.contacts.filter(({ id }) => id !== contactId),
     }));
   };
 
@@ -49,10 +53,7 @@ export class App extends Component {
         <h1>Phonebook</h1>
         <Layout>
           {' '}
-          <FormAddContact
-            onSubmit={this.addContact}
-            currentState={this.state}
-          />
+          <FormAddContact onSubmit={this.addContact} />
         </Layout>
         <Layout>
           <Title title="Contacts" />
@@ -64,6 +65,7 @@ export class App extends Component {
             />
           )}
         </Layout>
+        <ToastContainer />
         <GlobalStyle />
       </>
     );
